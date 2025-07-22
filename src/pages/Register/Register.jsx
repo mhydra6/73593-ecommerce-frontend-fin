@@ -5,7 +5,6 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  // Cambia esta URL por la URL real de tu recurso usuarios en MockAPI
   const MOCKAPI_URL = "https://685b755e89952852c2d9975f.mockapi.io/usuarios";
 
   const handleSubmit = async (e) => {

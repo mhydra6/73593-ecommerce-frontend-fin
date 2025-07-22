@@ -4,6 +4,25 @@ import { useNavigate } from 'react-router-dom';
 
 const URL = import.meta.env.VITE_MOCKAPI_URL;
 
+// Función para convertir string precio a número
+function parsePrice(priceStr) {
+  if (typeof priceStr === "number") return priceStr;
+
+  if (!priceStr) return 0;
+
+  let clean = priceStr.replace(/[^0-9.,]/g, '');
+
+  if (clean.indexOf('.') > -1 && clean.indexOf(',') > -1) {
+    clean = clean.replace(/\./g, '').replace(',', '.');
+  } else {
+    clean = clean.replace(',', '.');
+  }
+
+  const parsed = parseFloat(clean);
+
+  return isNaN(parsed) ? 0 : parsed;
+}
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
@@ -52,7 +71,7 @@ export default function Home() {
   };
 
   const handleToggleCart = () => {
-    setShowCart(prev => !prev);
+    setShowCart((prev) => !prev);
   };
 
   const handleClearCart = () => {
@@ -62,12 +81,18 @@ export default function Home() {
   if (loading) return <p>Cargando productos...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const totalCart = cart.reduce(
+    (acc, item) => acc + parsePrice(item.price) * item.quantity,
+    0
+  );
+
   return (
     <main className="main-container">
       <section className="section-productos">
         <h1 className="h1-products">PRODUCTOS DESTACADOS</h1>
         <button onClick={handleToggleCart}>
-          {showCart ? 'Cerrar Carrito' : 'Ver Carrito'} ({cart.reduce((sum, item) => sum + item.quantity, 0)})
+          {showCart ? 'Cerrar Carrito' : 'Ver Carrito'} (
+          {cart.reduce((sum, item) => sum + item.quantity, 0)})
         </button>
       </section>
 
@@ -81,10 +106,13 @@ export default function Home() {
               <ul>
                 {cart.map((item) => (
                   <li key={item.id}>
-                    <strong>{item.title}</strong> - Cantidad: {item.quantity}
+                    <strong>{item.title}</strong> - Cantidad: {item.quantity} - Precio unitario: ${parsePrice(item.price).toFixed(2)} - Subtotal: ${(parsePrice(item.price) * item.quantity).toFixed(2)}
                   </li>
                 ))}
               </ul>
+              <p>
+                <strong>Total: ${totalCart.toFixed(2)}</strong>
+              </p>
               <button onClick={handleClearCart}>Vaciar Carrito</button>
             </>
           )}
@@ -113,7 +141,7 @@ export default function Home() {
                   onClick={() => navigate(`/productos/${product.id}`)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <i className="fa-regular fa-eye"/>
+                  <i className="fa-regular fa-eye" />
                 </div>
               </div>
               <button
