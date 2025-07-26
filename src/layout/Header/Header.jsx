@@ -2,12 +2,9 @@ import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Header.css";
 import "./slider.css";
-import { useOrder } from "../../context/useOrder"; // ajustá la ruta si tu estructura cambia
-
-
 export default function Header() {
   const [user, setUser] = useState(null);
-  const { count, total } = useOrder();
+
 
 
   // Obtener el usuario del localStorage al cargar
@@ -80,15 +77,11 @@ export default function Header() {
             {user ? (
               <>
                 <span className="nav-link">Hola, {user.name}</span>
-                <button onClick={handleLogout} className="btn btn-logout">Logout</button>
+                <button onClick={handleLogout} className="btn-btn-logout">LOG OUT</button>
               </>
             ) : (
-              <NavLink to="/login" className="nav-link">LOGIN</NavLink>
+              <NavLink to="/login" className="nav-link">LOG IN</NavLink>
             )}
-          </div>
-          <div className="cart-container">
-            <i className="fa-solid fa-cart-shopping" />
-            <span className="cart-info"> {count} - ${total}</span>
           </div>
           <div className="picture-container">
             <img

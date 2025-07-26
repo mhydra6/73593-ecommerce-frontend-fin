@@ -1,97 +1,157 @@
 .contact-table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 8px;
   width: calc(100% - 60px);
-  margin: 10px auto;
+  margin: 20px auto;
+  box-shadow: 0 4px 15px rgba(162, 54, 172, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
 }
 
 .contact-table th,
 .contact-table td {
-  padding: 10px;
+  padding: 12px 15px;
   text-align: left;
-  border: 2px solid #a236ac;
+  border-bottom: 1px solid #d7a0df88;
+  vertical-align: middle;
 }
 
 .contact-table th {
-  background-color: #a236ac;
-  color: #ffffff;
+  background: linear-gradient(135deg, #a236ac, #7b2380);
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.contact-table td {
+  border: none;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.contact-table tr:hover {
+  background-color: #f4eaff;
+  transition: background-color 0.3s ease;
 }
 
 .contact-table img {
   max-width: 50px;
-  border-radius: 50%; /* si algún día pones avatar */
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(162, 54, 172, 0.3);
+  transition: transform 0.3s ease;
 }
 
+.contact-table img:hover {
+  transform: scale(1.1);
+}
+
+/* Botones de acción */
 .edit-btn,
 .delete-btn {
-  background-color: #c3ebb1;
-  color: #111111;
-  padding: 5px 10px;
+  padding: 7px 14px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 3px 6px rgba(195, 235, 177, 0.5);
+  margin-right: 6px;
+}
+
+.edit-btn {
+  background-color: #c3ebb1;
+  color: #111;
+}
+
+.edit-btn:hover {
+  background-color: #a7d290;
+  box-shadow: 0 5px 12px #a7d290aa;
 }
 
 .delete-btn {
   background-color: #f50303;
-  color: #ffffff;
+  color: #fff;
+  box-shadow: 0 3px 6px #f5030388;
 }
 
+.delete-btn:hover {
+  background-color: #b40000;
+  box-shadow: 0 5px 15px #b40000bb;
+}
+
+/* Botonera */
 .buttons {
   display: flex;
   justify-content: flex-end;
   margin: 20px 0;
 }
 
-.buttons button {
+.btn-new-user {
+  display: inline-block;
   background-color: #a236ac;
-  color: #ffffff;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 30px;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 10px rgba(162, 54, 172, 0.5);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-left: 10px;
 }
 
-.buttons button:hover {
-  background-color: var(--hover-color);
+.btn-new-user:hover {
+  background-color: #7b2380;
+  box-shadow: 0 5px 15px #7b2380cc;
 }
 
+/* Título */
 main h1 {
   display: block;
-  margin: 0 auto;
+  margin: 20px auto;
   text-align: center;
   width: fit-content;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 700;
+  color: #a236ac;
+  text-shadow: 1px 1px 3px rgba(162, 54, 172, 0.6);
+  letter-spacing: 1.5px;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .buttons {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .contact-table {
     font-size: 14px;
+    width: 100%;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: none;
+    border-spacing: 0 6px;
+  }
+
+  .contact-table img {
+    max-width: 40px;
   }
 
   main h1 {
     font-size: 24px;
+    margin: 15px auto;
+    width: auto;
   }
-}
 
-.edit-btn,
-.delete-btn {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.edit-btn {
-  background-color: #c3ebb1;
-  color: #111111;
-}
-
-.delete-btn {
-  background-color: #f50303;
-  color: #ffffff;
+  .buttons button {
+    margin-right: 0;
+    width: 45%;
+    max-width: 150px;
+  }
 }

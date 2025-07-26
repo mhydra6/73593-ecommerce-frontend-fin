@@ -1,34 +1,49 @@
 import React, { useState } from "react";
 import "./Register.css";
 
+const API_URL = import.meta.env.VITE_API_URL + "/users";
+
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-
-  const MOCKAPI_URL = "https://685b755e89952852c2d9975f.mockapi.io/usuarios";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
 
-    // Validar que password y confirm-password coincidan
-    if (formData.get("password") !== formData.get("confirm-password")) {
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const confirmPassword = formData.get("confirm-password");
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Por favor, ingresa un correo electrónico válido.");
+      return;
+    }
+
+    const passwordRegex = /^[a-zA-Z0-9]{4}$/;
+    if (!passwordRegex.test(password)) {
+      alert("La contraseña debe tener exactamente 4 caracteres alfanuméricos.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
       alert("Las contraseñas no coinciden");
       return;
     }
 
-    // Crear objeto con los datos a enviar
     const nuevoUsuario = {
       name: formData.get("name"),
-      email: formData.get("email"),
-      password: formData.get("password"),
+      email,
+      password,
       birthdate: formData.get("birthdate"),
       country: formData.get("country"),
       observations: formData.get("observations"),
+      role: formData.get("role"), // ← ← ← Nuevo: el rol elegido
     };
 
     try {
-      const res = await fetch(MOCKAPI_URL, {
+      const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevoUsuario),
@@ -38,7 +53,8 @@ export default function Register() {
         alert("Usuario registrado correctamente");
         e.target.reset();
       } else {
-        alert("Error al registrar el usuario");
+        const err = await res.json();
+        alert("Error al registrar: " + err.message || "Error desconocido");
       }
     } catch (error) {
       console.error("Error de conexión:", error);
@@ -59,10 +75,18 @@ export default function Register() {
           required
           maxLength={50}
           pattern="^[A-Za-zÀ-ÿ\s]+$"
+          placeholder="Ej: Juan Pérez"
         />
 
         <label htmlFor="email">Correo Electrónico</label>
-        <input type="email" id="email" name="email" required maxLength={100} />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          maxLength={100}
+          placeholder="Ej: correo@ejemplo.com"
+        />
 
         <label htmlFor="password">Contraseña</label>
         <div className="password-container">
@@ -71,8 +95,9 @@ export default function Register() {
             id="password"
             name="password"
             required
-            minLength={8}
-            maxLength={20}
+            maxLength={4}
+            pattern="[a-zA-Z0-9]{4}"
+            placeholder="4 caracteres alfanuméricos"
           />
           <label className="eye-icon">
             <input
@@ -90,8 +115,9 @@ export default function Register() {
             id="confirm-password"
             name="confirm-password"
             required
-            minLength={8}
-            maxLength={20}
+            maxLength={4}
+            pattern="[a-zA-Z0-9]{4}"
+            placeholder="Repite la contraseña"
           />
           <label className="eye-icon">
             <input
@@ -103,63 +129,27 @@ export default function Register() {
         </div>
 
         <label htmlFor="birthdate">Fecha de Nacimiento</label>
-        <input type="date" id="birthdate" name="birthdate" required />
+        <input
+          type="date"
+          id="birthdate"
+          name="birthdate"
+          required
+        />
 
         <label htmlFor="country">País</label>
         <select id="country" name="country" required defaultValue="">
-          <option value="" disabled>
-            Elija País
-          </option>
-          <option value="alemania">Alemania</option>
+          <option value="" disabled>Elija País</option>
           <option value="argentina">Argentina</option>
-          <option value="australia">Australia</option>
-          <option value="austria">Austria</option>
-          <option value="belgica">Bélgica</option>
-          <option value="bolivia">Bolivia</option>
-          <option value="brasil">Brasil</option>
-          <option value="canada">Canadá</option>
           <option value="chile">Chile</option>
-          <option value="colombia">Colombia</option>
-          <option value="corea_del_sur">Corea del Sur</option>
-          <option value="costa_rica">Costa Rica</option>
-          <option value="dinamarca">Dinamarca</option>
-          <option value="ecuador">Ecuador</option>
-          <option value="egipto">Egipto</option>
-          <option value="el_salvador">El Salvador</option>
-          <option value="emiratos_arabes">Emiratos Árabes Unidos</option>
-          <option value="españa">España</option>
-          <option value="estados_unidos">Estados Unidos</option>
-          <option value="filipinas">Filipinas</option>
-          <option value="finlandia">Finlandia</option>
-          <option value="francia">Francia</option>
-          <option value="grecia">Grecia</option>
-          <option value="guatemala">Guatemala</option>
-          <option value="honduras">Honduras</option>
-          <option value="hungria">Hungría</option>
-          <option value="india">India</option>
-          <option value="indonesia">Indonesia</option>
-          <option value="irlanda">Irlanda</option>
-          <option value="israel">Israel</option>
-          <option value="italia">Italia</option>
-          <option value="jamaica">Jamaica</option>
-          <option value="japon">Japón</option>
-          <option value="mexico">México</option>
-          <option value="marruecos">Marruecos</option>
-          <option value="noruega">Noruega</option>
-          <option value="nueva_zelanda">Nueva Zelanda</option>
-          <option value="panama">Panamá</option>
-          <option value="paraguay">Paraguay</option>
-          <option value="peru">Perú</option>
-          <option value="polonia">Polonia</option>
-          <option value="portugal">Portugal</option>
-          <option value="reino_unido">Reino Unido</option>
-          <option value="republica_dominicana">República Dominicana</option>
-          <option value="sudafrica">Sudáfrica</option>
-          <option value="suecia">Suecia</option>
-          <option value="suiza">Suiza</option>
-          <option value="tailandia">Tailandia</option>
-          <option value="turquia">Turquía</option>
           <option value="uruguay">Uruguay</option>
+          {/* + Países */}
+        </select>
+
+        <label htmlFor="role">Rol</label>
+        <select id="role" name="role" required>
+          <option value="client">cliente</option>
+          <option value="employee">empleado</option>
+          <option value="admin">admin</option>
         </select>
 
         <label htmlFor="observations">Observaciones</label>

@@ -110,6 +110,8 @@ body {
   text-decoration: none;
   padding: 0.5rem 1rem;
   display: block;
+  font-size: 1rem;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -117,26 +119,66 @@ body {
   color: #fff;
 }
 
+/* -------------------------- */
+/*  USER INFO PANEL FIXED ✅  */
+/* -------------------------- */
+
 .user-info {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;         /* ← ¡Evita que se bajen! */
+  
+  gap: 2rem;
+  max-width: 600px;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .cart-container {
+  font-size: 1rem;
   color: #000;
-  font-size: 20px;
   margin-right: 0.5rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cart-info {
+  margin-left: 5px;
+  font-weight: bold;
+  color: white;
+}
+
+.btn-btn-logout {
+  height: 32px;
+  padding: 0 12px;
+  background-color: #aa62c7;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.btn-btn-logout:hover {
+  background-color: white;
+  color: #000;
 }
 
 .picture-container .user-picture {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   object-fit: cover;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
-/* Desktop nav */
-@media (min-width: 900px) {
+/* --------------------------- */
+/* DESKTOP NAV (Min 900px) ✅ */
+/* --------------------------- */
+@media (min-width: 1080px) {
   .burger-container {
     display: none;
   }
@@ -154,12 +196,32 @@ body {
     margin: 0;
   }
   .nav-link {
-    padding: 1rem;
+    padding: 0.5rem;
   }
 }
 
-.cart-info {
-  margin-left: 5px;
-  font-weight: bold;
-  color: white;
+/* -------------------------- */
+/*  RESPONSIVE PARA CELULAR  */
+/* -------------------------- */
+@media (max-width: 768px) {
+  .user-info {
+    justify-content: center;
+    padding: 0.5rem 0;
+  }
+
+  .nav-link,
+  .cart-container,
+  .btn-btn-logout {
+    font-size: 0.8rem;
+  }
+
+  .btn-btn-logout {
+    padding: 0 8px;
+    height: 28px;
+  }
+
+  .picture-container .user-picture {
+    width: 32px;
+    height: 32px;
+  }
 }

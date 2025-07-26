@@ -10,19 +10,17 @@ export default function AdminContacto() {
   const [editFormData, setEditFormData] = useState({
     name: "",
     email: "",
-    country: "",
-    birthdate: ""
+    role: ""
   });
 
   useEffect(() => {
-    const URL_USUARIOS = "https://685b755e89952852c2d9975f.mockapi.io/usuarios";
-
     async function fetchUsuarios() {
       try {
-        const res = await fetch(URL_USUARIOS);
+        const res = await fetch("http://localhost:3000/users");
         if (!res.ok) throw new Error(`Error al cargar usuarios: ${res.status}`);
         const data = await res.json();
-        setUsuarios(data);
+        if (!Array.isArray(data.users)) throw new Error("Respuesta inesperada del servidor");
+        setUsuarios(data.users);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -33,31 +31,12 @@ export default function AdminContacto() {
     fetchUsuarios();
   }, []);
 
-  const formatDate = (fecha) => {
-    const date = new Date(fecha);
-    if (isNaN(date)) return fecha;
-    const dia = String(date.getDate()).padStart(2, "0");
-    const mes = String(date.getMonth() + 1).padStart(2, "0");
-    const año = date.getFullYear();
-    return `${dia}/${mes}/${año}`;
-  };
-
-  const formatDateISO = (fecha) => {
-    const date = new Date(fecha);
-    if (isNaN(date)) return "";
-    const año = date.getFullYear();
-    const mes = String(date.getMonth() + 1).padStart(2, "0");
-    const dia = String(date.getDate()).padStart(2, "0");
-    return `${año}-${mes}-${dia}`;
-  };
-
   const handleEditClick = (usuario) => {
-    setEditUserId(usuario.id);
+    setEditUserId(usuario._id);
     setEditFormData({
-      name: usuario.name,
-      email: usuario.email,
-      country: usuario.country,
-      birthdate: formatDateISO(usuario.birthdate)
+      name: usuario.name || "",
+      email: usuario.email || "",
+      role: usuario.role || "client"
     });
   };
 
@@ -67,17 +46,28 @@ export default function AdminContacto() {
   };
 
   const handleSaveClick = async (id) => {
+    const token = localStorage.getItem("token");
+
     try {
-      const res = await fetch(`https://685b755e89952852c2d9975f.mockapi.io/usuarios/${id}`, {
+      const res = await fetch(`http://localhost:3000/users/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(editFormData)
       });
-      if (!res.ok) throw new Error("Error al actualizar usuario");
-      const updatedUser = await res.json();
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Error al actualizar usuario");
+      }
+
+      const result = await res.json();
+      const updatedUser = result.user; // ✅ Extraer solo el usuario
 
       setUsuarios((prev) =>
-        prev.map((usuario) => (usuario.id === id ? updatedUser : usuario))
+        prev.map((usuario) => (usuario._id === id ? updatedUser : usuario))
       );
       setEditUserId(null);
     } catch (err) {
@@ -90,13 +80,23 @@ export default function AdminContacto() {
   };
 
   const handleDelete = async (id) => {
+    const token = localStorage.getItem("token");
+
     if (window.confirm("¿Estás seguro de que querés eliminar este usuario?")) {
       try {
-        const res = await fetch(`https://685b755e89952852c2d9975f.mockapi.io/usuarios/${id}`, {
-          method: "DELETE"
+        const res = await fetch(`http://localhost:3000/users/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
         });
-        if (!res.ok) throw new Error("Error al eliminar usuario");
-        setUsuarios((prev) => prev.filter((u) => u.id !== id));
+
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.message || "Error al eliminar usuario");
+        }
+
+        setUsuarios((prev) => prev.filter((u) => u._id !== id));
       } catch (err) {
         alert(err.message);
       }
@@ -122,15 +122,14 @@ export default function AdminContacto() {
             <tr>
               <th>Nombre</th>
               <th>Email</th>
-              <th>País</th>
-              <th>Fecha de Nacimiento</th>
+              <th>Rol</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {usuarios.map((usuario) =>
-              editUserId === usuario.id ? (
-                <tr key={usuario.id}>
+              editUserId === usuario._id ? (
+                <tr key={usuario._id}>
                   <td>
                     <input
                       type="text"
@@ -148,23 +147,18 @@ export default function AdminContacto() {
                     />
                   </td>
                   <td>
-                    <input
-                      type="text"
-                      name="country"
-                      value={editFormData.country}
+                    <select
+                      name="role"
+                      value={editFormData.role}
                       onChange={handleInputChange}
-                    />
+                    >
+                      <option value="client">Cliente</option>
+                      <option value="employee">Empleado</option>
+                      <option value="admin">Admin</option>
+                    </select>
                   </td>
                   <td>
-                    <input
-                      type="date"
-                      name="birthdate"
-                      value={editFormData.birthdate}
-                      onChange={handleInputChange}
-                    />
-                  </td>
-                  <td>
-                    <button className="edit-btn" onClick={() => handleSaveClick(usuario.id)}>
+                    <button className="edit-btn" onClick={() => handleSaveClick(usuario._id)}>
                       Guardar
                     </button>
                     <button className="delete-btn" onClick={handleCancelClick}>
@@ -173,16 +167,15 @@ export default function AdminContacto() {
                   </td>
                 </tr>
               ) : (
-                <tr key={usuario.id}>
+                <tr key={usuario._id}>
                   <td>{usuario.name}</td>
                   <td>{usuario.email}</td>
-                  <td>{usuario.country}</td>
-                  <td>{formatDate(usuario.birthdate)}</td>
+                  <td>{usuario.role}</td>
                   <td>
                     <button className="edit-btn" onClick={() => handleEditClick(usuario)}>
                       Editar
                     </button>
-                    <button className="delete-btn" onClick={() => handleDelete(usuario.id)}>
+                    <button className="delete-btn" onClick={() => handleDelete(usuario._id)}>
                       Eliminar
                     </button>
                   </td>

@@ -24,16 +24,24 @@ export default function OrderProvider({ children }) {
   }, [cart]);
 
   const addToCart = (product) => {
-    setCart((prev) => {
-      const exists = prev.find((item) => item.id === product.id);
+    setCart((prevCart) => {
+      const exists = prevCart.find((item) => item.productId === product._id);
       if (exists) {
-        return prev.map((item) =>
-          item.id === product.id
+        return prevCart.map((item) =>
+          item.productId === product._id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        return [...prev, { ...product, quantity: 1 }];
+        return [
+          ...prevCart,
+          {
+            productId: product._id,
+            title: product.title,
+            price: product.price,
+            quantity: 1,
+          },
+        ];
       }
     });
   };

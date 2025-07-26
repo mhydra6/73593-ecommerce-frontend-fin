@@ -1,0 +1,141 @@
+/* Ícono flotante del carrito */
+.cart-icon-wrapper {
+  position: fixed;
+  top: 10px;
+  right: 50px;
+  font-size: 28px;
+  color: #a236ac;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -2px;
+  background-color: rgb(0, 255, 0);
+  color: rgb(0, 0, 0);
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
+  line-height: 1;
+}
+
+/* Pop-up del carrito */
+.cart-popup {
+  position: fixed; 
+  top: 70px; /* desplaza hacia abajo para que no tape el header */
+  right: 20px;
+  width: 300px;
+  color:#0f0f0f;
+  background: rgb(255, 255, 255);
+  border-radius: 10px;
+  border: 2px solid #a236ac;
+  padding: 1rem;
+  box-shadow: 0 0 15px rgba(216, 35, 35, 0.2);
+  z-index: 1050; /* más alto que otros elementos del header */
+}
+
+.cart-popup h3 {
+  margin-top: 0;
+  color: #a236ac;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.cart-popup ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.cart-popup li {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px dashed #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.cart-total {
+  font-weight: bold;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #0f0f0f;
+}
+
+.clear-cart-btn,
+.close-cart-btn {
+  background-color: #a236ac;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.clear-cart-btn:hover {
+  background-color: #c30000;
+}
+
+.close-cart-btn {
+  background-color: #777;
+}
+
+.close-cart-btn:hover {
+  background-color: #555;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 480px) {
+  .cart-popup {
+    right: 10px;
+    width: 90%;
+    max-width: 300px;
+    top: 80px;
+  }
+
+  .cart-icon-wrapper {
+    top: 15px;
+    right: 15px;
+  }
+
+  .cart-count {
+    font-size: 10px;
+    padding: 2px 5px;
+    top: -6px;
+    right: -10px;
+  }
+}
+.send-order-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  margin: 5px 0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.send-order-btn:hover {
+  background-color: #218838;
+}
+.cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.cart-item {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}

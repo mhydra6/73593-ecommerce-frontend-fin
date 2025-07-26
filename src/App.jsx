@@ -11,7 +11,7 @@ import Productos from "./pages/Productos/Productos";
 import Login from "./pages/login/login";
 
 
-const URL= import.meta.env.VITE_MOCKAPI_URL;
+const URL= import.meta.env.VITE_API_URL;
 
 export default function App() {
     return <>

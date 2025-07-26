@@ -1,4 +1,9 @@
-import { useContext } from "react";
-import { OrderContext } from "./OrderContext"; // Asegurate de que el path sea correcto
+// src/context/useOrder.js (o ajustá la ruta según tu estructura)
 
-export const useOrder = () => useContext(OrderContext);
+import { useContext } from "react";
+import { OrderContext } from "./OrderContext";
+
+// Custom hook para usar el contexto del carrito/pedidos
+export const useOrder = () => {
+  return useContext(OrderContext);
+};
